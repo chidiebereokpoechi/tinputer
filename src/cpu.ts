@@ -103,6 +103,24 @@ export class CPU {
         break
       }
 
+      /* Store the value contained in a memory location into a
+       * register */
+      case OpCodes.MOV_MEM_TO_REG: {
+        const address: number = this.fetch_16()
+        const register: Registers = this.fetch()
+        this.set_register(register, this.memory.load_16(address))
+        break
+      }
+
+      /* Store the value contained in a register into a memory
+       * location */
+      case OpCodes.MOV_REG_TO_MEM: {
+        const register: Registers = this.fetch()
+        const address: number = this.fetch_16()
+        this.memory.store_byte(address, this.get_register(register))
+        break
+      }
+
       /* Store the value contained in a register inside a different
        * register */
       case OpCodes.MOV_REG_TO_REG: {

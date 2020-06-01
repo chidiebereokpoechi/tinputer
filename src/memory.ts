@@ -32,15 +32,28 @@ export class Memory {
     return this.memory.getUint16(address)
   }
 
-  public store_byte(address: number, byte: number): void {
+  public store_byte(address: number, value: number): void {
     if (address > this.MAX_OFFSET) {
       throw new OutOfBoundsException()
     }
 
-    this.memory.setUint8(address, byte)
+    this.memory.setUint8(address, value)
   }
 
-  public push_byte(byte: number): void {
-    this.store_byte(++this.pointer, byte)
+  public store_16(address: number, value: number): void {
+    if (address > this.MAX_OFFSET) {
+      throw new OutOfBoundsException()
+    }
+
+    this.memory.setUint16(address, value)
+  }
+
+  public push_byte(value: number): void {
+    this.store_byte(++this.pointer, value)
+  }
+
+  public push_16(value: number): void {
+    this.store_16(this.pointer, value)
+    this.pointer += 2
   }
 }

@@ -3,6 +3,8 @@ export enum OpCodes {
   ADD_REG_TO_REG,
   AND_REG_TO_REG,
   MOV_LITERAL_TO_REG,
+  MOV_MEM_TO_REG,
+  MOV_REG_TO_MEM,
   MOV_REG_TO_REG,
   OR_REG_TO_REG,
 }

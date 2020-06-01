@@ -1,0 +1,30 @@
+{
+  "name": "tinputer",
+  "version": "0.1.0",
+  "description": "16-Bit Virtual Machine in TypeScript",
+  "main": "dist/index.js",
+  "dependencies": {
+    "typescript": "^3.9.3"
+  },
+  "devDependencies": {
+    "@types/node": "^14.0.6"
+  },
+  "scripts": {
+    "start": "tsc && node dist/index.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/chidiebereokpoechi/tinputer.git"
+  },
+  "keywords": [
+    "virtual",
+    "machine",
+    "16-bit"
+  ],
+  "author": "Chidiebere Okpoechi",
+  "license": "GPL-3.0-or-later",
+  "bugs": {
+    "url": "https://github.com/chidiebereokpoechi/tinputer/issues"
+  },
+  "homepage": "https://github.com/chidiebereokpoechi/tinputer#readme"
+}

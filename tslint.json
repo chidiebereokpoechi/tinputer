@@ -1,0 +1,28 @@
+{
+  "defaultSeverity": "error",
+  "extends": ["tslint:recommended"],
+  "jsRules": {
+    "no-unused-expression": true
+  },
+  "rules": {
+    "variable-name": false,
+    "quotemark": [true, "single", "jsx-double"],
+    "member-access": [true],
+    "ordered-imports": [true, "lowercase-first"],
+    "max-line-length": [true, 150],
+    "member-ordering": [false],
+    "interface-name": [false],
+    "arrow-parens": false,
+    "ban-types": false,
+    "semicolon": false,
+    "no-console": false,
+    "max-classes-per-file": false,
+    "no-empty": false,
+    "no-bitwise": false,
+    "trailing-comma": [true, "es5"],
+    "only-arrow-functions": false,
+    "object-literal-sort-keys": false
+  },
+  "rulesDirectory": [],
+  "exclude": ["node_modules/**/*.js", "node_modules/**/*.ts"]
+}

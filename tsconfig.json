@@ -1,0 +1,11 @@
+{
+  "target": "es2015",
+  "compilerOptions": {
+    "module": "CommonJS",
+    "moduleResolution": "node",
+    "target": "es2015",
+    "lib": ["DOM", "ES2017"],
+    "baseUrl": "src",
+    "outDir": "dist"
+  }
+}

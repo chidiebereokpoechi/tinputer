@@ -1,16 +1,16 @@
 import { Memory } from './memory'
-import { OpCodes } from './op_codes'
+import { OpCode } from './op-code'
 import { hexify } from './util'
 
 export enum Registers {
-  IP = 0x00,
-  ACC = 0x01,
-  R1 = 0x02,
-  R2 = 0x03,
-  R3 = 0x04,
-  R4 = 0x05,
-  R5 = 0x06,
-  R6 = 0x07,
+  IP,
+  ACC,
+  R1,
+  R2,
+  R3,
+  R4,
+  R5,
+  R6,
 }
 
 const REGISTER_NAMES = ['ip', 'acc', 'r1', 'r2', 'r3', 'r4', 'r5', 'r6']
@@ -22,24 +22,24 @@ export class CPU {
     this.registers = Memory.createMemory(REGISTER_NAMES.length * 2)
   }
 
-  private set_register(register: Registers, value: number): void {
+  private setRegister(register: Registers, value: number): void {
     this.registers.setUint16(register * 2, value)
   }
 
-  private get_register(register_id: Registers): number {
+  private getRegister(register_id: Registers): number {
     return this.registers.getUint16(register_id * 2)
   }
 
   public log(): void {
-    const ip_location = this.get_register(Registers.IP)
+    const ip_location = this.getRegister(Registers.IP)
 
     console.log(
       new Uint8Array(10)
-        .map((_, index) => this.memory.load_byte(ip_location + index))
+        .map((_, index) => this.memory.loadByte(ip_location + index))
         .reduce(
           (prev, curr) => prev + hexify(curr) + ' ',
-          ip_location === 0 ? '' : '... '
-        )
+          ip_location === 0 ? '' : '... ',
+        ),
     )
 
     console.log('  ^'.padStart(ip_location === 0 ? 0 : 7, ' '), '\n')
@@ -49,8 +49,8 @@ export class CPU {
       console.log(
         `${register_name.padEnd(4, ' ')}: ${hexify(
           value,
-          true
-        )} [ ${value.toString().padStart(5, ' ')} ]`
+          true,
+        )} [ ${value.toString().padStart(5, ' ')} ]`,
       )
     })
 
@@ -58,101 +58,101 @@ export class CPU {
   }
 
   public fetch(length_16?: boolean): number {
-    const instruction_index = this.get_register(Registers.IP)
+    const instruction_index = this.getRegister(Registers.IP)
     const instruction = length_16
-      ? this.memory.load_16(instruction_index)
-      : this.memory.load_byte(instruction_index)
-    this.set_register(Registers.IP, instruction_index + (length_16 ? 2 : 1))
+      ? this.memory.load16(instruction_index)
+      : this.memory.loadByte(instruction_index)
+    this.setRegister(Registers.IP, instruction_index + (length_16 ? 2 : 1))
     return instruction
   }
 
-  public fetch_16(): number {
+  public fetch16(): number {
     return this.fetch(true)
   }
 
-  public decode_execute(instruction: OpCodes): void {
+  public decodeExec(instruction: OpCode): void {
     switch (instruction) {
       /* Perform an arithmetic ADD operation on the contents of the
        * registers provided and store the result in the accumulator */
-      case OpCodes.ADD_REG_TO_REG: {
+      case OpCode.ADD_REG_TO_REG: {
         const reg_1: Registers = this.fetch()
         const reg_2: Registers = this.fetch()
-        this.set_register(
+        this.setRegister(
           Registers.ACC,
-          this.get_register(reg_1) + this.get_register(reg_2)
+          this.getRegister(reg_1) + this.getRegister(reg_2),
         )
         break
       }
 
       /* Perform a logical AND operation on the contents of the
        * registers provided and store the result in the accumulator */
-      case OpCodes.AND_REG_TO_REG: {
+      case OpCode.AND_REG_TO_REG: {
         const reg_1: Registers = this.fetch()
         const reg_2: Registers = this.fetch()
-        this.set_register(
+        this.setRegister(
           Registers.ACC,
-          this.get_register(reg_1) & this.get_register(reg_2)
+          this.getRegister(reg_1) & this.getRegister(reg_2),
         )
         break
       }
 
       /* Store a literal value inside a given register */
-      case OpCodes.MOV_LITERAL_TO_REG: {
-        const literal: number = this.fetch_16()
-        this.set_register(this.fetch() as Registers, literal)
+      case OpCode.MOV_LITERAL_TO_REG: {
+        const literal: number = this.fetch16()
+        this.setRegister(this.fetch() as Registers, literal)
         break
       }
 
       /* Store the value contained in a memory location into a
        * register */
-      case OpCodes.MOV_MEM_TO_REG: {
-        const address: number = this.fetch_16()
+      case OpCode.MOV_MEM_TO_REG: {
+        const address: number = this.fetch16()
         const register: Registers = this.fetch()
-        this.set_register(register, this.memory.load_16(address))
+        this.setRegister(register, this.memory.load16(address))
         break
       }
 
       /* Store the value contained in a register into a memory
        * location */
-      case OpCodes.MOV_REG_TO_MEM: {
+      case OpCode.MOV_REG_TO_MEM: {
         const register: Registers = this.fetch()
-        const address: number = this.fetch_16()
-        this.memory.store_byte(address, this.get_register(register))
+        const address: number = this.fetch16()
+        this.memory.store16(address, this.getRegister(register))
         break
       }
 
       /* Store the value contained in a register inside a different
        * register */
-      case OpCodes.MOV_REG_TO_REG: {
+      case OpCode.MOV_REG_TO_REG: {
         const source_register: Registers = this.fetch()
-        this.set_register(
+        this.setRegister(
           this.fetch() as Registers,
-          this.get_register(source_register)
+          this.getRegister(source_register),
         )
         break
       }
 
       /* Perform a logical OR operation on the contents of the
        * registers provided and store the result in the accumulator */
-      case OpCodes.OR_REG_TO_REG: {
+      case OpCode.OR_REG_TO_REG: {
         const reg_1: Registers = this.fetch()
         const reg_2: Registers = this.fetch()
-        this.set_register(
+        this.setRegister(
           Registers.ACC,
-          this.get_register(reg_1) | this.get_register(reg_2)
+          this.getRegister(reg_1) | this.getRegister(reg_2),
         )
         break
       }
 
       // Do nothing
-      case OpCodes.NO_OP:
+      case OpCode.NO_OP:
       default:
         break
     }
   }
 
   public step(): void {
-    const instruction: OpCodes = this.fetch()
-    this.decode_execute(instruction)
+    const instruction: OpCode = this.fetch()
+    this.decodeExec(instruction)
   }
 }

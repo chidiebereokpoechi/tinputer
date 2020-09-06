@@ -1,4 +1,4 @@
-export enum OpCodes {
+export enum OpCode {
   NO_OP,
   ADD_REG_TO_REG,
   AND_REG_TO_REG,

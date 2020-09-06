@@ -1,1 +1,1 @@
-export * from './out_of_bounds'
+export * from './out-of-bounds'

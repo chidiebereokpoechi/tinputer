@@ -1,35 +1,35 @@
 import * as readline from 'readline'
 import { CPU, Registers } from './cpu'
 import { Memory } from './memory'
-import { OpCodes } from './op_codes'
+import { OpCode } from './op-code'
 
-const memory: Memory = new Memory(256 * 256)
+const memory: Memory = new Memory(Math.pow(2, 16))
 
 // Store 00AB inside Register r1
-memory.push_byte(OpCodes.MOV_LITERAL_TO_REG)
-memory.push_byte(0x00)
-memory.push_byte(0xab)
-memory.push_byte(Registers.R1)
+memory.pushByte(OpCode.MOV_LITERAL_TO_REG)
+memory.pushByte(0x00)
+memory.pushByte(0xab)
+memory.pushByte(Registers.R1)
 
 // Store 34FA inside Register r2
-memory.push_byte(OpCodes.MOV_LITERAL_TO_REG)
-memory.push_byte(0x34)
-memory.push_byte(0xfa)
-memory.push_byte(Registers.R2)
+memory.pushByte(OpCode.MOV_LITERAL_TO_REG)
+memory.pushByte(0x34)
+memory.pushByte(0xfa)
+memory.pushByte(Registers.R2)
 
 // Add values in r1 and r2 and store in acc
-memory.push_byte(OpCodes.ADD_REG_TO_REG)
-memory.push_byte(Registers.R1)
-memory.push_byte(Registers.R2)
+memory.pushByte(OpCode.ADD_REG_TO_REG)
+memory.pushByte(Registers.R1)
+memory.pushByte(Registers.R2)
 
 // Set value at memory location to 0x3456
-memory.store_16(0x1023, 0x4566)
+memory.store16(0x1023, 0x4566)
 
 // Move value at memory location 0x1023 into r4
-memory.push_byte(OpCodes.MOV_MEM_TO_REG)
-memory.push_byte(0x10)
-memory.push_byte(0x23)
-memory.push_byte(Registers.R4)
+memory.pushByte(OpCode.MOV_MEM_TO_REG)
+memory.pushByte(0x10)
+memory.pushByte(0x23)
+memory.pushByte(Registers.R4)
 
 const computer: CPU = new CPU(memory)
 

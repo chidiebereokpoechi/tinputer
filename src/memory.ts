@@ -11,12 +11,12 @@ export class Memory {
   public MAX_OFFSET: number
 
   constructor(n_bytes: number) {
-    this.pointer = -1
+    this.pointer = 0
     this.MAX_OFFSET = n_bytes
     this.memory = Memory.createMemory(n_bytes)
   }
 
-  public load_byte(address: number): number {
+  public loadByte(address: number): number {
     if (address > this.MAX_OFFSET) {
       throw new OutOfBoundsException()
     }
@@ -24,7 +24,7 @@ export class Memory {
     return this.memory.getUint8(address)
   }
 
-  public load_16(address: number): number {
+  public load16(address: number): number {
     if (address + 1 > this.MAX_OFFSET) {
       throw new OutOfBoundsException()
     }
@@ -32,7 +32,7 @@ export class Memory {
     return this.memory.getUint16(address)
   }
 
-  public store_byte(address: number, value: number): void {
+  public storeByte(address: number, value: number): void {
     if (address > this.MAX_OFFSET) {
       throw new OutOfBoundsException()
     }
@@ -40,20 +40,20 @@ export class Memory {
     this.memory.setUint8(address, value)
   }
 
-  public store_16(address: number, value: number): void {
-    if (address > this.MAX_OFFSET) {
+  public store16(address: number, value: number): void {
+    if (address + 1 > this.MAX_OFFSET) {
       throw new OutOfBoundsException()
     }
 
     this.memory.setUint16(address, value)
   }
 
-  public push_byte(value: number): void {
-    this.store_byte(++this.pointer, value)
+  public pushByte(value: number): void {
+    this.storeByte(this.pointer++, value)
   }
 
-  public push_16(value: number): void {
-    this.store_16(this.pointer, value)
+  public push16(value: number): void {
+    this.store16(this.pointer, value)
     this.pointer += 2
   }
 }
